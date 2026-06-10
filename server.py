@@ -350,8 +350,8 @@ class VegaHandler(BaseHTTPRequestHandler):
         print(f"✅ Served: {file_path}")
 
 def main():
-    host = "127.0.0.1"
-    port = 8000
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", 8000))
     
     print("=" * 60)
     print("🏥 VEGA MEDICAL AI PLATFORM")
