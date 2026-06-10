@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Vega Medical AI | Advanced Clinical Intelligence Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0A5C6E;
+            --primary-dark: #074553;
+            --primary-light: #1B8A7A;
+            --secondary: #D94A3B;
+            --secondary-light: #E86558;
+            --accent: #F4A261;
+            --dark: #1E2A32;
+            --gray-900: #2C3E50;
+            --gray-700: #4A627A;
+            --gray-500: #8CA3B8;
+            --gray-300: #CBD5E1;
+            --gray-100: #F1F5F9;
+            --success: #2E7D64;
+            --warning: #E6A017;
+            --info: #3B82F6;
+            --danger: #EF4444;
+            --critical: #DC2626;
+            --urgent: #F59E0B;
+            --routine: #10B981;
+            --gradient-primary: linear-gradient(135deg, #0A5C6E 0%, #1B8A7A 100%);
+            --gradient-secondary: linear-gradient(135deg, #D94A3B 0%, #E86558 100%);
+            --gradient-dark: linear-gradient(135deg, #1E2A32 0%, #2C3E50 100%);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.15);
+            --shadow-xl: 0 24px 48px rgba(0,0,0,0.2);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Auth Screen */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0A5C6E 0%, #1B8A7A 50%, #074553 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: floatGrid 30s linear infinite;
+        }
+
+        @keyframes floatGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .auth-card {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: 48px;
+            width: min(100%, 520px);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .medical-logo { text-align: center; margin-bottom: 32px; }
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .auth-toggle {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            background: var(--gray-100);
+            padding: 6px;
+            border-radius: 60px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--gray-700);
+        }
+
+        .toggle-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label { font-weight: 600; margin-bottom: 8px; display: block; color: var(--dark); }
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(10,92,110,0.1);
+        }
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-secondary {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { background: var(--primary); color: white; }
+
+        /* Dashboard */
+        .dashboard { display: none; min-height: 100vh; }
+        .dashboard.visible { display: flex; }
+
+        .sidebar {
+            width: 280px;
+            background: var(--gradient-dark);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+        }
+        .sidebar-header { padding: 32px 24px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 24px; }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            margin: 4px 12px;
+            border-radius: var(--radius-md);
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateX(4px);
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 24px 32px;
+        }
+        .top-bar {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 16px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .view { display: none; animation: fadeInUp 0.4s ease; }
+        .view.active { display: block; }
+
+        /* Analysis Grid */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .confidence-meter {
+            height: 8px;
+            background: var(--gray-300);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .confidence-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.5s ease;
+        }
+        .priority-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .priority-critical { background: #FEE2E2; color: var(--critical); border: 1px solid var(--critical); }
+        .priority-urgent { background: #FEF3C7; color: var(--urgent); border: 1px solid var(--urgent); }
+        .priority-routine { background: #D1FAE5; color: var(--routine); border: 1px solid var(--routine); }
+        .image-preview {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .image-preview:hover { transform: scale(1.05); border-color: var(--primary); }
+        .similar-case {
+            padding: 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .similar-case:hover {
+            background: var(--gray-100);
+            transform: translateX(4px);
+            border-color: var(--primary);
+        }
+
+        /* Collaboration Panel */
+        .collab-panel {
+            background: var(--gray-100);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .collab-message {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            animation: slideInRight 0.3s ease;
+        }
+        .collab-message.incoming {
+            border-left: 4px solid var(--primary);
+            background: linear-gradient(135deg, white 0%, #F0F9FF 100%);
+        }
+        .collab-message.outgoing {
+            border-left: 4px solid var(--accent);
+            background: linear-gradient(135deg, white 0%, #FFFBEB 100%);
+        }
+
+        /* Printable Report */
+        @media print {
+            .sidebar, .top-bar, .nav-item, .btn-primary, .btn-secondary, .no-print { display: none !important; }
+            .main-content { margin-left: 0 !important; padding: 0 !important; }
+            .card { box-shadow: none !important; border: 1px solid #ddd !important; }
+            body { background: white !important; }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid var(--success);
+        }
+        .toast.error { border-left-color: var(--danger); }
+
+        @media (max-width: 1024px) {
+            .analysis-grid { grid-template-columns: 1fr; }
+            .sidebar { transform: translateX(-100%); position: fixed; z-index: 1000; }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Auth Screen -->
+<div id="authScreen" class="auth-container">
+    <div class="auth-card">
+        <div class="medical-logo">
+            <div class="logo-icon"><i class="fas fa-heartbeat"></i></div>
+            <h1 style="font-size: 32px;">Vega Medical AI</h1>
+            <p style="color: var(--gray-700);">Advanced Clinical Intelligence Platform</p>
+        </div>
+        <div class="auth-toggle">
+            <button id="showSignInBtn" class="toggle-btn active">Sign In</button>
+            <button id="showSignUpBtn" class="toggle-btn">Create Account</button>
+        </div>
+        <form id="signInForm">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-input" placeholder="doctor@hospital.com" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-input" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%">Sign In</button>
+        </form>
+        <form id="signUpForm" style="display:none">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password (min 6 characters)</label>
+                <input type="password" name="password" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirm_password" class="form-input" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%">Create Account</button>
+        </form>
+        <div style="text-align: center; margin: 20px 0;"><span style="color: var(--gray-500);">OR</span></div>
+        <button id="googleSignIn" class="btn-primary" style="width:100%; background: white; color: var(--dark); border: 2px solid var(--gray-300);">
+            <i class="fab fa-google"></i> Continue with Google
+        </button>
+        <div id="authStatus" style="margin-top: 20px; text-align: center; font-size: 0.875rem;"></div>
+    </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="dashboard">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div>
+                    <h3 style="color: white;">Vega AI</h3>
+                    <p style="font-size: 11px; color: rgba(255,255,255,0.7);">Clinical Platform</p>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="nav-item active" data-view="analyze"><i class="fas fa-microscope"></i><span>AI Analysis</span></div>
+            <div class="nav-item" data-view="reports"><i class="fas fa-folder-medical"></i><span>Medical Reports</span></div>
+            <div class="nav-item" data-view="validate"><i class="fas fa-check-double"></i><span>Clinical Review</span></div>
+            <div class="nav-item" data-view="collaborate"><i class="fas fa-users"></i><span>Collaborate</span></div>
+        </nav>
+        <div style="position: absolute; bottom: 24px; left: 0; right: 0; padding: 0 20px;">
+            <div style="background: rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 16px;">
+                <i class="fas fa-shield-alt" style="color: var(--accent);"></i>
+                <p style="font-size: 11px; margin-top: 8px; color: rgba(255,255,255,0.7);">HIPAA Compliant<br>Enterprise Security</p>
+            </div>
+        </div>
+    </aside>
+    
+    <main class="main-content">
+        <div class="top-bar">
+            <div>
+                <h2 id="pageTitle" style="font-size: 24px;">AI Medical Analysis</h2>
+                <p style="color: var(--gray-500); margin-top: 4px;">Powered by Gemini 1.5 Pro Vision</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <span id="userEmailDisplay" style="font-weight: 500;"></span>
+                <button id="signOutBtn" class="btn-secondary" style="padding: 8px 20px;">Sign Out</button>
+            </div>
+        </div>
+        
+        <!-- Analysis View -->
+        <div id="analyzeView" class="view active">
+            <div class="analysis-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-upload"></i> Clinical Data Input</h3>
+                    <form id="analysisForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="form-label">Patient Full Name</label>
+                            <input type="text" name="patientName" class="form-input" placeholder="e.g., Sarah Johnson">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Medical Record Number</label>
+                            <input type="text" name="patientId" class="form-input" placeholder="MRN-XXXX">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="form-group"><label class="form-label">Age</label><input type="text" name="age" class="form-input" placeholder="Years"></div>
+                            <div class="form-group"><label class="form-label">Gender</label><select name="gender" class="form-input"><option>Female</option><option>Male</option><option>Other</option></select></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Study/Exam Type</label>
+                            <select name="documentType" class="form-input" id="studyType">
+                                <option>Chest X-Ray</option><option>CT Head</option><option>MRI Brain</option><option>ECG</option><option>Mammogram</option><option>Ultrasound</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Upload Medical Images</label>
+                            <input type="file" id="fileInput" class="form-input" accept="image/*" multiple style="border: 2px dashed var(--gray-300);">
+                            <div id="imagePreviewContainer" style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Presenting Symptoms</label>
+                            <textarea name="symptoms" rows="3" class="form-input" placeholder="Describe symptoms, onset, duration..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Medical History</label>
+                            <textarea name="history" rows="2" class="form-input" placeholder="Previous conditions, surgeries..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Current Medications</label>
+                            <textarea name="medications" rows="2" class="form-input" placeholder="Medications & dosages"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" id="analyzeBtn" style="width:100%"><i class="fas fa-microscope"></i> Run AI Analysis</button>
+                        <button type="button" id="loadDemoBtn" class="btn-secondary" style="width:100%; margin-top: 12px;"><i class="fas fa-flask"></i> Load Demo Case</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-chart-line"></i> AI Analysis Results</h3>
+                    <div id="analysisResults">
+                        <div style="text-align: center; padding: 60px 20px; color: var(--gray-500);">
+                            <i class="fas fa-brain" style="font-size: 48px; margin-bottom: 16px;"></i>
+                            <p>Upload medical images and clinical data<br>AI will generate comprehensive analysis</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-stethoscope"></i> Clinical Decision Support</h3>
+                    <div id="clinicalSupport">
+                        <p style="color: var(--gray-500); text-align: center; padding: 40px;">Awaiting analysis for recommendations</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-history"></i> Similar Cases & References</h3>
+                    <div id="similarCases">
+                        <p style="color: var(--gray-500); text-align: center; padding: 40px;">No similar cases found</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reports View -->
+        <div id="reportsView" class="view">
+            <div class="card">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-folder-medical"></i> Medical Reports Archive</h3>
+                <div id="reportsContainer"></div>
+            </div>
+        </div>
+        
+        <!-- Clinical Review View -->
+        <div id="validateView" class="view">
+            <div class="card">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-stethoscope"></i> Clinical Validation Portal</h3>
+                <form id="validationForm">
+                    <div class="form-group">
+                        <label class="form-label">Select Report for Review</label>
+                        <select id="validationSelect" class="form-input" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Validation Level</label>
+                        <select name="status" class="form-input">
+                            <option value="expert_reviewed">Expert Reviewed</option>
+                            <option value="clinically_validated">Clinically Validated</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Reviewing Physician</label>
+                        <input type="text" name="reviewer" class="form-input" placeholder="Full Name & Credentials" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Clinical Notes & Recommendations</label>
+                        <textarea name="notes" rows="4" class="form-input" placeholder="Add your professional assessment..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width:100%"><i class="fas fa-check-circle"></i> Submit Validation</button>
+                </form>
+                <div id="validationHistory" style="margin-top: 24px;"></div>
+            </div>
+        </div>
+        
+        <!-- Collaboration View -->
+        <div id="collaborateView" class="view">
+            <div class="card">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-users"></i> Clinical Collaboration Hub</h3>
+                <div style="display: grid; gap: 20px;">
+                    <!-- Share Report Section -->
+                    <div style="background: var(--gray-100); border-radius: var(--radius-lg); padding: 20px;">
+                        <h4><i class="fas fa-share-alt"></i> Share Report with Colleague</h4>
+                        <div style="display: flex; gap: 12px; margin-top: 16px;">
+                            <select id="shareReportSelect" class="form-input" style="flex: 2;">
+                                <option value="">Select a report to share</option>
+                            </select>
+                            <input type="email" id="colleagueEmail" class="form-input" placeholder="colleague@hospital.com" style="flex: 2;">
+                            <button class="btn-primary" onclick="shareReportWithColleague()"><i class="fas fa-paper-plane"></i> Share</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Request Second Opinion -->
+                    <div style="background: var(--gray-100); border-radius: var(--radius-lg); padding: 20px;">
+                        <h4><i class="fas fa-comments"></i> Request Second Opinion</h4>
+                        <div style="display: flex; gap: 12px; margin-top: 16px;">
+                            <select id="opinionReportSelect" class="form-input" style="flex: 2;">
+                                <option value="">Select a report for second opinion</option>
+                            </select>
+                            <textarea id="opinionQuestion" class="form-input" rows="2" placeholder="Specific questions or concerns..."></textarea>
+                            <button class="btn-primary" onclick="requestSecondOpinion()"><i class="fas fa-send"></i> Send Request</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Collaboration Chat -->
+                    <div style="background: var(--gray-100); border-radius: var(--radius-lg); padding: 20px;">
+                        <h4><i class="fas fa-comment-dots"></i> Team Discussion</h4>
+                        <div id="chatMessages" style="height: 300px; overflow-y: auto; background: white; border-radius: var(--radius-md); padding: 16px; margin: 16px 0;">
+                            <div style="text-align: center; color: var(--gray-500); padding: 40px;">
+                                <i class="fas fa-comments" style="font-size: 32px; margin-bottom: 12px;"></i>
+                                <p>Start a discussion with your team</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <input type="text" id="chatMessage" class="form-input" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                            <button class="btn-primary" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const state = { reports: [], currentUser: null, auth: null, collaborators: [], chatMessages: [] };
+    let currentAnalysis = null;
+
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i><span>${message}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Collaboration Functions
+    function updateCollaborationSelects() {
+        const shareSelect = document.getElementById('shareReportSelect');
+        const opinionSelect = document.getElementById('opinionReportSelect');
+        
+        if (shareSelect && state.reports.length) {
+            shareSelect.innerHTML = '<option value="">Select a report to share</option>' + 
+                state.reports.map(r => `<option value="${r.id}">${r.id} - ${r.patient?.name || 'Unknown'}</option>`).join('');
+        }
+        if (opinionSelect && state.reports.length) {
+            opinionSelect.innerHTML = '<option value="">Select a report for second opinion</option>' + 
+                state.reports.map(r => `<option value="${r.id}">${r.id} - ${r.patient?.name || 'Unknown'}</option>`).join('');
+        }
+    }
+
+    function shareReportWithColleague() {
+        const reportId = document.getElementById('shareReportSelect').value;
+        const colleagueEmail = document.getElementById('colleagueEmail').value;
+        
+        if (!reportId) { showToast('Please select a report to share', 'error'); return; }
+        if (!colleagueEmail) { showToast('Please enter colleague email', 'error'); return; }
+        
+        const report = state.reports.find(r => r.id === reportId);
+        if (report) {
+            showToast(`Report ${reportId} shared with ${colleagueEmail}`, 'success');
+            document.getElementById('colleagueEmail').value = '';
+            // Add to chat
+            addChatMessage(`System: Report ${reportId} shared with ${colleagueEmail}`, 'system');
+        }
+    }
+
+    function requestSecondOpinion() {
+        const reportId = document.getElementById('opinionReportSelect').value;
+        const question = document.getElementById('opinionQuestion').value;
+        
+        if (!reportId) { showToast('Please select a report', 'error'); return; }
+        if (!question) { showToast('Please enter your question', 'error'); return; }
+        
+        const report = state.reports.find(r => r.id === reportId);
+        if (report) {
+            showToast(`Second opinion request sent for ${reportId}`, 'success');
+            document.getElementById('opinionQuestion').value = '';
+            addChatMessage(`🔄 Second opinion requested for ${reportId}: ${question}`, 'request');
+        }
+    }
+
+    function addChatMessage(message, type = 'outgoing') {
+        const container = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `collab-message ${type === 'outgoing' ? 'outgoing' : type === 'system' ? 'outgoing' : 'incoming'}`;
+        messageDiv.style.cssText = `
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: ${type === 'outgoing' ? '#E3F2FD' : type === 'system' ? '#F3E5F5' : '#E8F5E9'};
+            border-left: 3px solid ${type === 'outgoing' ? 'var(--primary)' : type === 'system' ? 'var(--accent)' : 'var(--success)'};
+        `;
+        messageDiv.innerHTML = `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <strong>${type === 'outgoing' ? state.currentUser?.email || 'You' : type === 'system' ? 'System' : 'Team Member'}</strong>
+                <small style="color: var(--gray-500);">${new Date().toLocaleTimeString()}</small>
+            </div>
+            <div>${message}</div>
+        `;
+        container.appendChild(messageDiv);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function sendChatMessage() {
+        const message = document.getElementById('chatMessage').value.trim();
+        if (!message) return;
+        addChatMessage(message, 'outgoing');
+        document.getElementById('chatMessage').value = '';
+        
+        // Simulate response for demo
+        setTimeout(() => {
+            if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hi')) {
+                addChatMessage(`Hello! How can I help with the clinical review?`, 'incoming');
+            } else if (message.toLowerCase().includes('report') || message.toLowerCase().includes('case')) {
+                addChatMessage(`I can help review the case. Which report number are you referring to?`, 'incoming');
+            }
+        }, 1000);
+    }
+
+    // Validation Functions
+    function submitValidation(reportId, status, reviewer, notes) {
+        const report = state.reports.find(r => r.id === reportId);
+        if (report) {
+            report.status = status;
+            report.validation = { reviewer, notes, validatedAt: new Date().toISOString() };
+            showToast(`Report ${reportId} marked as ${status.replace('_', ' ')}`, 'success');
+            renderReports();
+            renderValidationHistory();
+            return true;
+        }
+        return false;
+    }
+
+    function renderValidationHistory() {
+        const validated = state.reports.filter(r => r.validation);
+        const container = document.getElementById('validationHistory');
+        
+        if (!validated.length) {
+            container.innerHTML = '<p style="color: var(--gray-500); text-align: center;">No validated reports yet</p>';
+            return;
+        }
+        
+        container.innerHTML = `
+            <h4 style="margin-bottom: 12px;">Validation History</h4>
+            ${validated.map(r => `
+                <div style="background: var(--gray-100); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <strong>${r.id}</strong>
+                        <span class="priority-badge ${r.status === 'clinically_validated' ? 'priority-routine' : 'priority-urgent'}">${r.status.replace('_', ' ').toUpperCase()}</span>
+                    </div>
+                    <p style="font-size: 13px; margin-top: 8px;"><strong>Reviewer:</strong> ${r.validation.reviewer}</p>
+                    <p style="font-size: 13px;"><strong>Notes:</strong> ${r.validation.notes || 'No notes'}</p>
+                    <p style="font-size: 11px; color: var(--gray-500); margin-top: 8px;">${new Date(r.validation.validatedAt).toLocaleString()}</p>
+                </div>
+            `).join('')}
+        `;
+    }
+
+    // Analysis Functions
+    async function performAdvancedAnalysis(payload, images) {
+        const results = {
+            findings: [],
+            priority: 'routine',
+            confidenceScores: [],
+            differentialDiagnosis: [],
+            recommendations: [],
+            criticalAlerts: []
+        };
+        
+        const studyType = payload.documentType;
+        const symptoms = (payload.symptoms || '').toLowerCase();
+        
+        if (symptoms.includes('chest pain') || symptoms.includes('shortness of breath') || symptoms.includes('difficulty breathing')) {
+            results.priority = 'critical';
+            results.criticalAlerts.push('⚠️ Critical: Respiratory symptoms require immediate physician evaluation');
+        } else if (symptoms.includes('fever') || symptoms.includes('pain') || symptoms.includes('swelling')) {
+            results.priority = 'urgent';
+        }
+        
+        if (studyType === 'Chest X-Ray') {
+            results.findings = [
+                { text: 'Cardiothoracic ratio within normal limits', confidence: 92 },
+                { text: 'Clear lung fields without focal consolidation', confidence: 88 },
+                { text: 'No pneumothorax or pleural effusion detected', confidence: 95 },
+                { text: 'Bony thorax shows no acute fractures', confidence: 90 }
+            ];
+            results.differentialDiagnosis = ['Normal study - no acute cardiopulmonary findings', 'Clinical correlation recommended for reported symptoms'];
+            results.recommendations = ['Clinical correlation recommended', 'Follow-up imaging if symptoms persist within 4-6 weeks'];
+        } else if (studyType === 'CT Head') {
+            results.findings = [
+                { text: 'No acute intracranial hemorrhage', confidence: 96 },
+                { text: 'Midline structures are midline', confidence: 94 },
+                { text: 'Ventricular system is normal in size', confidence: 90 }
+            ];
+            results.differentialDiagnosis = ['Normal CT head study', 'No mass effect or herniation'];
+            results.recommendations = ['Clinical neurological exam recommended', 'Consider MRI if neurological symptoms persist'];
+        } else {
+            results.findings = [
+                { text: 'Document reviewed and key findings extracted', confidence: 85 },
+                { text: 'Clinical correlation with patient history recommended', confidence: 90 }
+            ];
+            results.differentialDiagnosis = ['Further clinical evaluation advised'];
+            results.recommendations = ['Review with attending physician', 'Consider additional diagnostic testing if indicated'];
+        }
+        
+        const avgConfidence = results.findings.reduce((sum, f) => sum + f.confidence, 0) / results.findings.length;
+        results.overallConfidence = Math.round(avgConfidence);
+        return results;
+    }
+    
+    function renderAnalysisResults(results) {
+        const priorityClass = results.priority === 'critical' ? 'priority-critical' : results.priority === 'urgent' ? 'priority-urgent' : 'priority-routine';
+        const priorityText = results.priority === 'critical' ? 'CRITICAL - Immediate Physician Review Required' : results.priority === 'urgent' ? 'URGENT - Review Within 24 Hours' : 'ROUTINE - Standard Review Timeline';
+        
+        const resultsHtml = `
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <span class="priority-badge ${priorityClass}">${priorityText}</span>
+                    <span style="font-size: 14px; font-weight: 600; color: var(--primary);">AI Confidence: ${results.overallConfidence}%</span>
+                </div>
+                <div class="confidence-meter"><div class="confidence-fill" style="width: ${results.overallConfidence}%"></div></div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 12px;"><i class="fas fa-search"></i> Key AI Findings</h4>
+                ${results.findings.map(f => `
+                    <div style="margin-top: 12px; padding: 14px; background: var(--gray-100); border-radius: var(--radius-md);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-weight: 500;">${f.text}</span>
+                            <span style="font-weight: 600; color: var(--primary);">${f.confidence}%</span>
+                        </div>
+                        <div class="confidence-meter"><div class="confidence-fill" style="width: ${f.confidence}%"></div></div>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 12px;"><i class="fas fa-diagnoses"></i> Differential Diagnosis</h4>
+                <ul style="padding-left: 20px;">
+                    ${results.differentialDiagnosis.map(d => `<li style="margin-bottom: 8px;">${d}</li>`).join('')}
+                </ul>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 12px;"><i class="fas fa-tasks"></i> Clinical Recommendations</h4>
+                <ul style="padding-left: 20px;">
+                    ${results.recommendations.map(r => `<li style="margin-bottom: 8px;">${r}</li>`).join('')}
+                </ul>
+            </div>
+            
+            ${results.criticalAlerts.length ? `
+                <div style="background: #FEE2E2; padding: 16px; border-radius: var(--radius-md); border-left: 4px solid var(--critical); margin-bottom: 20px;">
+                    <h4 style="color: var(--critical); margin-bottom: 8px;"><i class="fas fa-exclamation-triangle"></i> Critical Alerts</h4>
+                    ${results.criticalAlerts.map(a => `<p style="margin-top: 4px;">${a}</p>`).join('')}
+                </div>
+            ` : ''}
+            
+            <div style="display: flex; gap: 12px; margin-top: 20px;" class="no-print">
+                <button class="btn-primary" onclick="printReport()"><i class="fas fa-print"></i> Print Report</button>
+                <button class="btn-secondary" onclick="shareReport()"><i class="fas fa-share-alt"></i> Share</button>
+            </div>
+        `;
+        
+        document.getElementById('analysisResults').innerHTML = resultsHtml;
+        
+        const clinicalSupportHtml = `
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 12px;">Recommended Diagnostic Tests</h4>
+                <ul style="padding-left: 20px;">
+                    <li>Complete Blood Count (CBC) with differential</li>
+                    <li>Basic Metabolic Panel (BMP)</li>
+                    <li>${results.priority === 'critical' ? 'Immediate Cardiology/Emergency Consult' : 'Routine Follow-up in 2-4 weeks'}</li>
+                    <li>Chest X-ray if not already performed</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 12px;">Clinical Pathways</h4>
+                <ul style="padding-left: 20px;">
+                    <li>Review with attending physician within ${results.priority === 'critical' ? '1 hour' : results.priority === 'urgent' ? '24 hours' : '7 days'}</li>
+                    <li>Consider specialist referral based on persistent symptoms</li>
+                    <li>Document all findings in electronic health record</li>
+                </ul>
+            </div>
+        `;
+        document.getElementById('clinicalSupport').innerHTML = clinicalSupportHtml;
+        
+        const similarCasesHtml = state.reports.slice(0, 3).map(r => `
+            <div class="similar-case" onclick="showToast('Viewing case ${r.id}')">
+                <strong>${r.id}</strong>
+                <p style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">${r.patient?.name || 'Unknown'} - ${r.upload?.documentType || 'Medical report'}</p>
+            </div>
+        `).join('');
+        document.getElementById('similarCases').innerHTML = similarCasesHtml || '<p>No similar cases found</p>';
+    }
+    
+    function printReport() {
+        window.print();
+    }
+    
+    function shareReport() {
+        const reportData = currentAnalysis;
+        if (reportData) {
+            const shareLink = `${window.location.origin}/report/${Date.now()}`;
+            navigator.clipboard.writeText(shareLink);
+            showToast('Report link copied to clipboard! Share with colleagues.');
+        } else {
+            showToast('No analysis results to share', 'error');
+        }
+    }
+    
+    // Image preview
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        const container = document.getElementById('imagePreviewContainer');
+        container.innerHTML = '';
+        Array.from(e.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.className = 'image-preview';
+                img.onclick = () => showToast(`Image: ${file.name}`);
+                container.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+    
+    async function analyze(event) {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const files = document.getElementById('fileInput').files;
+        const payload = Object.fromEntries(formData.entries());
+        if (files.length > 0) payload.fileCount = files.length;
+        
+        const btn = document.getElementById('analyzeBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<div class="loader"></div> Analyzing with AI...';
+        btn.disabled = true;
+        
+        try {
+            const results = await performAdvancedAnalysis(payload, files);
+            currentAnalysis = results;
+            renderAnalysisResults(results);
+            
+            const report = {
+                id: `VX-${Date.now()}`,
+                patient: { name: payload.patientName || 'Anonymous', patientId: payload.patientId || 'N/A' },
+                upload: { documentType: payload.documentType, analysisDate: new Date().toLocaleString() },
+                currentFindings: results.findings,
+                potentialConcerns: results.criticalAlerts,
+                recommendedNextSteps: results.recommendations,
+                status: 'ai_generated',
+                createdAt: new Date().toISOString()
+            };
+            state.reports.unshift(report);
+            renderReports();
+            updateCollaborationSelects();
+            showToast('AI analysis complete!', 'success');
+        } catch(err) {
+            showToast('Analysis failed: ' + err.message, 'error');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+    
+    function renderReports() {
+        const container = document.getElementById('reportsContainer');
+        const validationSelect = document.getElementById('validationSelect');
+        
+        if (!state.reports.length) {
+            container.innerHTML = '<div style="text-align: center; padding: 60px; color: var(--gray-500);"><i class="fas fa-folder-open" style="font-size: 48px; margin-bottom: 16px;"></i><p>No reports generated yet. Start by analyzing a medical image.</p></div>';
+            if (validationSelect) validationSelect.innerHTML = '<option>No reports available</option>';
+            return;
+        }
+        
+        container.innerHTML = state.reports.map(report => `
+            <div style="background: white; border: 1px solid var(--gray-300); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; transition: all 0.3s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                    <div>
+                        <h4 style="color: var(--primary);">${report.patient?.name || 'Anonymous'}</h4>
+                        <p style="color: var(--gray-500); font-size: 13px;">${report.id} | ${report.upload?.documentType || 'Medical Report'}</p>
+                    </div>
+                    <span class="priority-badge ${report.status === 'clinically_validated' ? 'priority-routine' : report.status === 'expert_reviewed' ? 'priority-urgent' : 'priority-critical'}" style="font-size: 11px;">
+                        ${report.status?.replace(/_/g, ' ').toUpperCase() || 'PENDING'}
+                    </span>
+                </div>
+                <p style="color: var(--gray-700); margin: 12px 0; font-size: 14px;">${report.currentFindings?.[0]?.text?.substring(0, 120) || 'No findings available'}...</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                    <small style="color: var(--gray-500);"><i class="fas fa-calendar"></i> ${new Date(report.createdAt).toLocaleDateString()}</small>
+                    ${report.validation ? `<small style="color: var(--success);"><i class="fas fa-check-circle"></i> Reviewed by ${report.validation.reviewer}</small>` : ''}
+                </div>
+            </div>
+        `).join('');
+        
+        if (validationSelect && state.reports.length) {
+            validationSelect.innerHTML = state.reports.map(r => `<option value="${r.id}">${r.id} - ${r.patient?.name || 'Unknown'}</option>`).join('');
+        }
+    }
+    
+    // Auth functions
+    function setSignedIn(user) {
+        state.currentUser = user;
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('dashboard').classList.add('visible');
+        document.getElementById('userEmailDisplay').innerHTML = `<i class="fas fa-user-circle"></i> ${user.email}`;
+        showToast(`Welcome, ${user.email}!`);
+        addChatMessage(`${user.email} joined the collaboration hub`, 'system');
+    }
+    
+    function setSignedOut() {
+        state.currentUser = null;
+        document.getElementById('authScreen').style.display = 'flex';
+        document.getElementById('dashboard').classList.remove('visible');
+    }
+    
+    async function initializeFirebaseAuth() {
+        try {
+            const resp = await fetch("/api/firebase-config");
+            const config = await resp.json();
+            if (!config.configured) {
+                const mockUser = { email: "demo@medical.ai", displayName: "Demo User", getIdToken: async () => "mock" };
+                setSignedIn(mockUser);
+                return;
+            }
+            const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js");
+            const { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } = await import("https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js");
+            const app = initializeApp(config.firebase);
+            const auth = getAuth(app);
+            state.auth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut };
+            onAuthStateChanged(auth, (user) => user ? setSignedIn(user) : setSignedOut());
+        } catch(err) { console.error(err); const mockUser = { email: "demo@medical.ai", displayName: "Demo User", getIdToken: async () => "mock" }; setSignedIn(mockUser); }
+    }
+    
+    // Event listeners
+    document.getElementById('showSignInBtn').addEventListener('click', () => {
+        document.getElementById('signInForm').style.display = 'block';
+        document.getElementById('signUpForm').style.display = 'none';
+        document.getElementById('showSignInBtn').classList.add('active');
+        document.getElementById('showSignUpBtn').classList.remove('active');
+    });
+    document.getElementById('showSignUpBtn').addEventListener('click', () => {
+        document.getElementById('signInForm').style.display = 'none';
+        document.getElementById('signUpForm').style.display = 'block';
+        document.getElementById('showSignUpBtn').classList.add('active');
+        document.getElementById('showSignInBtn').classList.remove('active');
+    });
+    document.getElementById('signInForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = e.target.querySelector('[name="email"]').value;
+        const password = e.target.querySelector('[name="password"]').value;
+        if (state.auth) await state.auth.signInWithEmailAndPassword(state.auth.auth, email, password);
+        else showToast('Firebase not ready', 'error');
+    });
+    document.getElementById('signUpForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = e.target.querySelector('[name="email"]').value;
+        const password = e.target.querySelector('[name="password"]').value;
+        const confirm = e.target.querySelector('[name="confirm_password"]').value;
+        if (password !== confirm) { showToast('Passwords do not match', 'error'); return; }
+        if (state.auth) await state.auth.createUserWithEmailAndPassword(state.auth.auth, email, password);
+        else showToast('Firebase not ready', 'error');
+    });
+    document.getElementById('googleSignIn').addEventListener('click', async () => {
+        if (state.auth) await state.auth.signInWithPopup(state.auth.auth, new state.auth.GoogleAuthProvider());
+    });
+    document.getElementById('signOutBtn').addEventListener('click', async () => { if (state.auth) await state.auth.signOut(state.auth.auth); });
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            item.classList.add('active');
+            const view = item.dataset.view;
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`${view}View`).classList.add('active');
+            document.getElementById('pageTitle').innerHTML = item.querySelector('span').innerHTML;
+            if (view === 'collaborate') updateCollaborationSelects();
+            if (view === 'validate') renderValidationHistory();
+        });
+    });
+    document.getElementById('analysisForm').addEventListener('submit', analyze);
+    document.getElementById('validationForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const reportId = document.getElementById('validationSelect').value;
+        const status = e.target.querySelector('[name="status"]').value;
+        const reviewer = e.target.querySelector('[name="reviewer"]').value;
+        const notes = e.target.querySelector('[name="notes"]').value;
+        if (!reportId) { showToast('Please select a report', 'error'); return; }
+        if (submitValidation(reportId, status, reviewer, notes)) {
+            e.target.reset();
+            renderValidationHistory();
+        }
+    });
+    document.getElementById('loadDemoBtn').addEventListener('click', () => {
+        document.querySelector('[name="patientName"]').value = 'Sarah Johnson';
+        document.querySelector('[name="patientId"]').value = 'MRN-2024-001';
+        document.querySelector('[name="age"]').value = '58';
+        document.querySelector('[name="symptoms"]').value = 'Persistent cough, mild fever, shortness of breath on exertion';
+        document.querySelector('[name="history"]').value = 'Hypertension (diagnosed 2019), Type 2 Diabetes (diagnosed 2021)';
+        document.querySelector('[name="medications"]').value = 'Metformin 500mg BID, Lisinopril 10mg daily';
+        showToast('Demo case loaded successfully!');
+    });
+    
+    window.printReport = printReport;
+    window.shareReport = shareReport;
+    window.shareReportWithColleague = shareReportWithColleague;
+    window.requestSecondOpinion = requestSecondOpinion;
+    window.sendChatMessage = sendChatMessage;
+    
+    initializeFirebaseAuth();
+</script>
+</body>
+</html>
